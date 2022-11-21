@@ -50,7 +50,7 @@ app.post("/comments", async (req, res) => {
     await fs.mkdir("data/comments", {recursive: true});
     await fs.writeFile(`data/comments/${id}.txt`, content);
     // await fs.writeFile(`data/comments/1.html`, content);
-    console.log(content);
+    // console.log(content);
     res.status(201).json({
         id: id
     });
