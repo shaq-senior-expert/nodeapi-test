@@ -22,7 +22,23 @@ app.get("/outfit", (req, res) => {
 
 });
 
-app.post("/comments", (req, res) => {
+app.get("/comments/:id", async (req, res) => {
+    const id = req.params.id;
+    let content;
+
+    try{
+        content = await fs.readFile(`data/comments/${id}.txt`, "uft-8");
+
+    } catch(e){
+        return res.sendStatus(404);
+    }
+     
+    res.json({
+        content: content
+    });
+});
+
+app.post("/comments", async (req, res) => {
     const id = uuid();
     const content = req.body.content;
     
@@ -31,8 +47,13 @@ app.post("/comments", (req, res) => {
         return res.sendStatus(400);
     }
 
-    console.log(content);
-    res.send(content);
+    await fs.mkdir("data/comments", {recursive: true});
+    await fs.writeFile(`data/comments/${id}.txt`, content);
+    // await fs.writeFile(`data/comments/1.html`, content);
+    // console.log(content);
+    res.status(201).json({
+        id: id
+    });
     
 });
 
